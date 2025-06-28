@@ -18,7 +18,7 @@ export function WordSong({ word, wordKey }: WordSongProps) {
 
     const getDisplayWord = () => {
         if (isHidden) {
-            return '_'.repeat(word.length);
+            return '_'.repeat(Math.ceil(word.length * 1.5));
         }
         return word;
     };

@@ -24,14 +24,11 @@ export function SongProvider({ children }: { children: ReactNode }) {
             const existing = newMap.get(wordKey);
 
             if (existing) {
-                // Toggle existing word
                 newMap.set(wordKey, { ...existing, isHidden: !existing.isHidden });
             } else {
-                // Add new word as hidden
                 newMap.set(wordKey, { key: wordKey, word: originalWord, isHidden: true });
             }
 
-            // Show complete modified text in console
             const completeModifiedText = generateCompleteModifiedText(newMap);
             console.clear();
             console.log(completeModifiedText);
@@ -48,7 +45,6 @@ export function SongProvider({ children }: { children: ReactNode }) {
         const originalText = songData.lyrics;
         let modifiedText = '';
 
-        // Split by lines first
         const lines = originalText.split('\n');
 
         lines.forEach((line, lineIndex) => {
@@ -63,7 +59,6 @@ export function SongProvider({ children }: { children: ReactNode }) {
                 const wordDataEntry = data.get(wordKey);
 
                 if (wordDataEntry && wordDataEntry.isHidden) {
-                    // Extract punctuation and parentheses
                     const match = word.match(/^(\(*)(.*?)([?!,.\):]*)$/);
                     if (match) {
                         const [, openParens, cleanWord, closePunctuation] = match;
