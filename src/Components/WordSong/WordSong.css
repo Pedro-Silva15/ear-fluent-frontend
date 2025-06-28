@@ -1,0 +1,8 @@
+.word-song {
+    color: black;
+    cursor: pointer;
+}
+
+.word-song:hover {
+    color: whitesmoke;
+}
