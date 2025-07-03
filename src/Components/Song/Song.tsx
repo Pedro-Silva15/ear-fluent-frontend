@@ -1,9 +1,9 @@
 import './Song.css'
 import songData from '../../songExample.json'
 import { WordSong } from '../WordSong/WordSong'
-import React from 'react'
+import React, { memo } from 'react'
 
-export function Song() {
+export const Song = memo(function Song() {
     const songLyrics = songData.lyrics
 
     const filterWords = (words: string[]) => {
@@ -30,9 +30,11 @@ export function Song() {
     };
 
     return (
-        <>
-            <h1>Song Lyrics</h1>
-            <br />
+        <div className="song-container">
+            <div className="song-header">
+                <h1 className="song-title">{songData.songTitle}</h1>
+                <h2 className="song-artist">{songData.artistName}</h2>
+            </div>
             <div className="song-lyrics">
                 {songLyrics.split('\n').map((line, lineIndex) => {
                     if (line.trim() === '') {
@@ -46,15 +48,15 @@ export function Song() {
                     return (
                         <div key={lineIndex}>
                             {filterWords(line.split(' ')).map((word, wordIndex) => (
-                                <>
+                                <React.Fragment key={`${lineIndex}-${wordIndex}`}>
                                     {renderWord(word, `${lineIndex}-${wordIndex}`)}
                                     {' '}
-                                </>
+                                </React.Fragment>
                             ))}
                         </div>
                     );
                 })}
             </div>
-        </>
+        </div>
     );
-}
+});

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 import songData from '../songExample.json';
 
 interface WordData {
@@ -11,6 +11,8 @@ interface SongContextType {
     wordsData: Map<string, WordData>;
     toggleWord: (wordKey: string, originalWord: string) => void;
     getModifiedText: () => string;
+    clearAllHiddenWords: () => void;
+    hideWordsRandomly: (count: number) => void;
 }
 
 const SongContext = createContext<SongContextType | undefined>(undefined);
@@ -18,7 +20,7 @@ const SongContext = createContext<SongContextType | undefined>(undefined);
 export function SongProvider({ children }: { children: ReactNode }) {
     const [wordsData, setWordsData] = useState<Map<string, WordData>>(new Map());
 
-    const toggleWord = (wordKey: string, originalWord: string) => {
+    const toggleWord = useCallback((wordKey: string, originalWord: string) => {
         setWordsData(prev => {
             const newMap = new Map(prev);
             const existing = newMap.get(wordKey);
@@ -29,17 +31,61 @@ export function SongProvider({ children }: { children: ReactNode }) {
                 newMap.set(wordKey, { key: wordKey, word: originalWord, isHidden: true });
             }
 
-            const completeModifiedText = generateCompleteModifiedText(newMap);
-            console.clear();
-            console.log(completeModifiedText);
-
             return newMap;
         });
-    };
+    }, []);
 
-    const getModifiedText = (): string => {
+    const getModifiedText = useCallback((): string => {
         return generateCompleteModifiedText(wordsData);
-    };
+    }, [wordsData]);
+
+    const clearAllHiddenWords = useCallback(() => {
+        setWordsData(new Map());
+    }, []);
+
+    const hideWordsRandomly = useCallback((count: number) => {
+        // Primeiro limpa todas as palavras escondidas
+        setWordsData(new Map());
+
+        // Coleta todas as palavras válidas da música
+        const allWords: { key: string; word: string }[] = [];
+        const lines = songData.lyrics.split('\n');
+
+        lines.forEach((line, lineIndex) => {
+            if (line.trim() === '') return;
+
+            const words = line.split(' ');
+            words.forEach((word, wordIndex) => {
+                if (!word.trim()) return;
+                if (word.match(/^\(+\)$|^\($|^\)$/)) return;
+
+                // Extrai a palavra limpa (sem pontuação)
+                const match = word.match(/^(\(*)(.*?)([?!,.\):]*)$/);
+                if (match) {
+                    const [, , cleanWord] = match;
+                    if (cleanWord.length > 0) {
+                        allWords.push({
+                            key: `${lineIndex}-${wordIndex}`,
+                            word: cleanWord
+                        });
+                    }
+                }
+            });
+        });
+
+        // Seleciona palavras aleatórias para esconder
+        const wordsToHide = Math.min(count, allWords.length);
+        const shuffled = [...allWords].sort(() => Math.random() - 0.5);
+        const selectedWords = shuffled.slice(0, wordsToHide);
+
+        // Cria o novo mapa com as palavras selecionadas escondidas
+        const newMap = new Map<string, WordData>();
+        selectedWords.forEach(({ key, word }) => {
+            newMap.set(key, { key, word, isHidden: true });
+        });
+
+        setWordsData(newMap);
+    }, []);
 
     const generateCompleteModifiedText = (data: Map<string, WordData>): string => {
         const originalText = songData.lyrics;
@@ -80,7 +126,7 @@ export function SongProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <SongContext.Provider value={{ wordsData, toggleWord, getModifiedText }}>
+        <SongContext.Provider value={{ wordsData, toggleWord, getModifiedText, clearAllHiddenWords, hideWordsRandomly }}>
             {children}
         </SongContext.Provider>
     );

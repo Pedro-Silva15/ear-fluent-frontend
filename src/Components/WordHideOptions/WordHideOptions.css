@@ -1,0 +1,240 @@
+.word-hide-options {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.word-hide-options h3 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.hide-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.option {
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.option:hover {
+    border-color: crimson;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.option.active {
+    border-color: crimson;
+    background-color: #fff5f5;
+}
+
+/* Estado inativo/opaco */
+.option.inactive {
+    opacity: 0.4;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    border-color: #e0e0e0;
+}
+
+.option.inactive:hover {
+    border-color: #bbb;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    opacity: 0.6;
+}
+
+.option.inactive .option-header {
+    color: #999;
+}
+
+.option.inactive .option-description {
+    color: #aaa;
+}
+
+.option.inactive .apply-random-btn,
+.option.inactive .apply-choose-btn {
+    background-color: #ccc;
+    border-color: #ccc;
+    color: #888;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.option.inactive .random-count-input {
+    background-color: #f5f5f5;
+    border-color: #e0e0e0;
+    color: #999;
+    pointer-events: none;
+}
+
+.option-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.option-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.option-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.option-description {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.random-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.random-input-group label {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.random-count-input {
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+    width: 100%;
+}
+
+.random-count-input:focus {
+    outline: none;
+    border-color: crimson;
+    box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.1);
+}
+
+.random-count-input:disabled {
+    background-color: #f5f5f5;
+    border-color: #e0e0e0;
+    color: #999;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.apply-random-btn,
+.apply-choose-btn {
+    padding: 10px 16px;
+    border: 2px solid crimson;
+    border-radius: 6px;
+    background-color: crimson;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.apply-random-btn:hover,
+.apply-choose-btn:hover {
+    background-color: #b91c3c;
+    transform: scale(1.02);
+}
+
+.apply-random-btn:active,
+.apply-choose-btn:active {
+    transform: scale(0.98);
+}
+
+.apply-random-btn:disabled,
+.apply-choose-btn:disabled {
+    background-color: #ccc;
+    border-color: #ccc;
+    color: #888;
+    cursor: not-allowed;
+    transform: none;
+    pointer-events: none;
+}
+
+.apply-random-btn:disabled:hover,
+.apply-choose-btn:disabled:hover {
+    background-color: #ccc;
+    transform: none;
+}
+
+/* Garantir cursor pointer em toda a área do option */
+.option * {
+    cursor: pointer;
+}
+
+/* Exceto para elementos que devem ter cursors específicos */
+.option.inactive .apply-random-btn,
+.option.inactive .apply-choose-btn {
+    cursor: not-allowed;
+}
+
+.option.inactive .random-count-input {
+    cursor: not-allowed;
+}
+
+.apply-random-btn:disabled,
+.apply-choose-btn:disabled {
+    cursor: not-allowed;
+}
+
+.random-count-input:disabled {
+    cursor: not-allowed;
+}
+
+.random-count-input:not(:disabled) {
+    cursor: text;
+}
+
+.apply-random-btn:not(:disabled),
+.apply-choose-btn:not(:disabled) {
+    cursor: pointer;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .hide-options {
+        grid-template-columns: 1fr;
+    }
+
+    .word-hide-options {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .option {
+        padding: 12px;
+    }
+
+    .option-title {
+        font-size: 1rem;
+    }
+}
